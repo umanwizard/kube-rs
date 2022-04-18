@@ -1,5 +1,9 @@
 pub use k8s_openapi::apimachinery::pkg::apis::meta::v1::ObjectMeta;
-use k8s_openapi::{api::core::v1::ObjectReference, apimachinery::pkg::apis::meta::v1::OwnerReference};
+use k8s_openapi::{
+    api::core::v1::ObjectReference,
+    apimachinery::pkg::apis::meta::v1::{OwnerReference, Time},
+};
+
 use std::{borrow::Cow, collections::BTreeMap};
 
 /// An accessor trait for a kubernetes Resource.
@@ -170,6 +174,10 @@ pub trait ResourceExt: Resource {
     fn finalizers(&self) -> &[String];
     /// Provides mutable access to the finalizers
     fn finalizers_mut(&mut self) -> &mut Vec<String>;
+    /// Returns the creation timestamp
+    ///
+    /// This is guaranteed to exist on resources received by the apiserver.
+    fn creation(&self) -> Option<Time>;
 }
 
 // TODO: replace with ordinary static when BTreeMap::new() is no longer
@@ -224,5 +232,9 @@ impl<K: Resource> ResourceExt for K {
 
     fn finalizers_mut(&mut self) -> &mut Vec<String> {
         self.meta_mut().finalizers.get_or_insert_with(Vec::new)
+    }
+
+    fn creation(&self) -> Option<Time> {
+        self.meta().creation_timestamp.clone()
     }
 }

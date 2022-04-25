@@ -6,7 +6,7 @@
 //!
 //! Newcomers are recommended to start with the [`Controller`] builder, which gives an
 //! opinionated starting point that should be appropriate for simple operators, but all
-//! components are designed to be usable á la carte if your operator doesn't quite fit that mold.
+//! components are designed to be usable à la carte if your operator doesn't quite fit that mold.
 
 #![forbid(unsafe_code)]
 #![deny(clippy::all)]
